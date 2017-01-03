@@ -1,0 +1,13 @@
+Package: truss
+Type: Package
+Title: Graph clustering by truss
+Version: 0.1.0
+Author: Alex Perrone, Anthony Johnson
+Maintainer: Alex Perrone <alexander.perrone@jhuapl.edu>
+Description: Graph clustering by truss, currently supported on igraph objects.
+License: GPL-3
+LazyData: TRUE
+RoxygenNote: 5.0.1
+Imports: igraph,
+    Matrix
+Suggests: testthat
