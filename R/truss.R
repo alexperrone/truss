@@ -27,7 +27,7 @@
 #' E(g)[E(g_truss)$eid]$weight <- 3
 #' plot(g, layout = fixed_layout, edge.width = E(g)$weight)  # with truss
 
-truss <- function(g, k){
+truss <- function(g, k, color_graph = FALSE){
   if (k < 3){
     stop("k must be at least 3")
   }
@@ -65,33 +65,35 @@ truss <- function(g, k){
     # color_matrix <- .color_graph(support_matrix)  # add edge colorings
     edge_count <- edge_count_new
   }
-  # print(system.time(g <- .color_graph(g)))
+  if (color_graph){
+    print(system.time(g <- .color_graph(g)))  # experimental
+  }
   return(g)
 }
 
 
 # TODO: put in truss():
 .color_graph <- function(g){
-  E(g)$color <- NA
+  igraph::E(g)$color <- NA
   color <- 1
-  T <- matrix(triangles(g), nrow=3)
+  T <- matrix(igraph::triangles(g), nrow=3)
   for (i in seq(ncol(T))){
-    edge_1 <- E(g, c(T[1, i], T[2, i]))
-    edge_2 <- E(g, c(T[1, i], T[3, i]))
-    edge_3 <- E(g, c(T[2, i], T[3, i]))
+    edge_1 <- igraph::E(g, c(T[1, i], T[2, i]))
+    edge_2 <- igraph::E(g, c(T[1, i], T[3, i]))
+    edge_3 <- igraph::E(g, c(T[2, i], T[3, i]))
     if (!is.na(edge_1$color)){
-      E(g, c(T[1, i], T[3, i]))$color <- edge_1$color
-      E(g, c(T[2, i], T[3, i]))$color <- edge_1$color
+      igraph::E(g, c(T[1, i], T[3, i]))$color <- edge_1$color
+      igraph::E(g, c(T[2, i], T[3, i]))$color <- edge_1$color
     } else if (!is.na(edge_2$color)){
-      E(g, c(T[1, i], T[2, i]))$color <- edge_2$color
-      E(g, c(T[2, i], T[3, i]))$color <- edge_2$color
+      igraph::E(g, c(T[1, i], T[2, i]))$color <- edge_2$color
+      igraph::E(g, c(T[2, i], T[3, i]))$color <- edge_2$color
     } else if (!is.na(edge_3$color)){
-      E(g, c(T[1, i], T[3, i]))$color <- edge_3$color
-      E(g, c(T[2, i], T[3, i]))$color <- edge_3$color
+      igraph::E(g, c(T[1, i], T[3, i]))$color <- edge_3$color
+      igraph::E(g, c(T[2, i], T[3, i]))$color <- edge_3$color
     } else {
-      E(g, c(T[1, i], T[2, i]))$color <- color
-      E(g, c(T[1, i], T[3, i]))$color <- color
-      E(g, c(T[2, i], T[3, i]))$color <- color
+      igraph::E(g, c(T[1, i], T[2, i]))$color <- color
+      igraph::E(g, c(T[1, i], T[3, i]))$color <- color
+      igraph::E(g, c(T[2, i], T[3, i]))$color <- color
       color <- color + 1
     }
   }
