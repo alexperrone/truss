@@ -10,6 +10,8 @@ truss(g, k, color_graph = FALSE)
 \item{k}{The level of support, requiring that every edge in subgraph is in
 at least (k-2) triangles (J. Cohen 2008). \code{k} must be at least 3.}
 
+\item{color_graph}{Logical to color the graph (perform truss membership).}
+
 \item{graph}{An undirected graph (must be igraph).}
 }
 \value{

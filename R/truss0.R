@@ -1,30 +1,30 @@
-#' Cluster by k-truss: Deprecated version.
-#'
-#' Compute the k-truss of an undirected graph (deprecated).
-#'
-#' @param graph An undirected graph (must be igraph).
-#' @param k The level of support, requiring that every edge in subgraph is in
-#' at least (k-2) triangles (J. Cohen 2008). \code{k} must be at least 3.
-#' @return A subgraph containing all k-trusses in the graph for a given level of support \code{k}.
-#' @keywords graphs
-#' @examples
-#'
-#' require(igraph)
-#' set.seed(1)
-#' g <- sample_gnm(6, 9)
-#' E(g)$eid <- seq(ecount(g))
-#' g_truss <- truss(g, k = 3)
-#'
-#' # Plot original graph.
-#' fixed_layout <- layout_with_lgl(g)
-#' plot(g, layout = fixed_layout)  # original
-#'
-#' # Plot graph with truss clustering.
-#' E(g)$weight <- 1
-#' E(g)$color <- "gray"
-#' E(g)[E(g_truss)$eid]$color <- "blue"
-#' E(g)[E(g_truss)$eid]$weight <- 3
-#' plot(g, layout = fixed_layout, edge.width = E(g)$weight)  # with truss
+# Cluster by k-truss: Deprecated version.
+#
+# Compute the k-truss of an undirected graph (deprecated).
+#
+# @param graph An undirected graph (must be igraph).
+# @param k The level of support, requiring that every edge in subgraph is in
+# at least (k-2) triangles (J. Cohen 2008). \code{k} must be at least 3.
+# @return A subgraph containing all k-trusses in the graph for a given level of support \code{k}.
+# @keywords graphs
+# @examples
+#
+# require(igraph)
+# set.seed(1)
+# g <- sample_gnm(6, 9)
+# E(g)$eid <- seq(ecount(g))
+# g_truss <- truss(g, k = 3)
+#
+# # Plot original graph.
+# fixed_layout <- layout_with_lgl(g)
+# plot(g, layout = fixed_layout)  # original
+#
+# # Plot graph with truss clustering.
+# E(g)$weight <- 1
+# E(g)$color <- "gray"
+# E(g)[E(g_truss)$eid]$color <- "blue"
+# E(g)[E(g_truss)$eid]$weight <- 3
+# plot(g, layout = fixed_layout, edge.width = E(g)$weight)  # with truss
 
 truss0 <- function(g,k){
   empty.g <- graph.empty(0, directed=FALSE)
