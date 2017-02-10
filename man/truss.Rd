@@ -39,4 +39,7 @@ E(g)[E(g_truss)$eid]$color <- "blue"
 E(g)[E(g_truss)$eid]$weight <- 3
 plot(g, layout = fixed_layout, edge.width = E(g)$weight)  # with truss
 }
+\references{
+J. Cohen. Trusses: Cohesive subgraphs for social network analysis, 2008.
+}
 \keyword{graphs}

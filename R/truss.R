@@ -9,6 +9,7 @@
 #' @return A subgraph containing all k-trusses in the graph for a given level of support \code{k}.
 #' @export
 #' @keywords graphs
+#' @references J. Cohen. Trusses: Cohesive subgraphs for social network analysis, 2008.
 #' @examples
 #'
 #' require(igraph)
@@ -68,6 +69,7 @@ truss <- function(g, k, color_graph = FALSE){
 #' @return Vector indicating the maximal \code{k}-truss that each edge belongs to (NA if none).
 #' @export
 #' @keywords graphs
+#' @references J. Cohen. Trusses: Cohesive subgraphs for social network analysis, 2008.
 #' @examples
 #'
 #' require(igraph)

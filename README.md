@@ -25,3 +25,7 @@ library(truss)
 g <- sample_gnm(6, 9)
 g_truss <- truss(g, k = 3)
 ```
+
+The truss can be plotted (see `R/example.R`). 
+
+[political-books](https://github.com/alexperrone/truss/blob/master/political.png)

@@ -113,17 +113,14 @@ test_that("test truss equality for political books dataset", {
   edges <- read.csv("political_edges.csv")
   g <- igraph::graph_from_data_frame(d = edges, vertices = nodes, directed = FALSE)
   g <- igraph::simplify(g)
-  # Set up attributes for later plotting.
-  igraph::E(g)$eid <- seq(igraph::ecount(g))
-  igraph::E(g)$weight <- 1
-  igraph::E(g)$color <- "gray"
+  igraph::E(g)$eid <- 1:igraph::ecount(g)
   # Truss.
   g_5_truss <- truss(g, k = 5, color_graph = TRUE)
   plot_graph <- FALSE
   if (plot_graph == TRUE){
     # Plot original graph.
     fixed_layout <- igraph::layout_with_lgl(g)
-    plot(g, layout = fixed_layout, vertex.label = NA)  # original
+    plot(g, layout = fixed_layout, vertex.label = NA, edge.width = 1, vertex.size = 4)  # original
 
     # Plot graph with truss clustering.
     igraph::E(g)$weight <- 1
@@ -131,7 +128,7 @@ test_that("test truss equality for political books dataset", {
     igraph::E(g)[igraph::E(g_5_truss)$eid]$color <- igraph::E(g_5_truss)$color
     igraph::E(g)[igraph::E(g_5_truss)$eid]$weight <- 3
     plot(g, layout = fixed_layout, edge.width = igraph::E(g)$weight, vertex.label = NA,
-         edge.color = igraph::E(g)$color, vertex.size = 3,
+         edge.color = igraph::E(g)$color, vertex.size = 4,
          main = "Political dataset with 5-truss")  # with truss
   }
 })
