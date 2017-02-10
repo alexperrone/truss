@@ -26,23 +26,15 @@
 #' E(g)[E(g_truss)$eid]$color <- "blue"
 #' E(g)[E(g_truss)$eid]$weight <- 3
 #' plot(g, layout = fixed_layout, edge.width = E(g)$weight)  # with truss
-
 truss <- function(g, k, color_graph = FALSE){
   if (k < 3){
     stop("k must be at least 3")
   }
   g <- .validate_graph(g)
 
-  # Subset to only those nodes with degree at least (k-1)?
-  # g <- igraph::induced_subgraph(g, vids = igraph::V(g)[igraph::degree(g) >= (k - 1)])
-
-  # Subset to only those nodes that occur in at least (k-2) triangles?
-  # g <- igraph::induced_subgraph(g, vids = igraph::V(g)[igraph::count_triangles(g) >= (k - 2)])
-
   edge_count <- igraph::ecount(g)
-
   if (edge_count == 0){
-    return(igraph::make_empty_graph(n = 0, directed = FALSE))
+    return(g)
   }
 
   while (edge_count != 0){
@@ -50,10 +42,8 @@ truss <- function(g, k, color_graph = FALSE){
     # The edge i-j occurs in number of triangles equal to scalar product of
     # row i and row j in the adjacency matrix A.
     triangle_matrix <- Matrix::tcrossprod(A)  # sparse matrix
-    # Each edge needs to be in at least (k-2) triangles.
-    support_matrix <- as.matrix(triangle_matrix >= (k - 2))
-    # Look up support for each edge.
-    has_support <- support_matrix[igraph::ends(g, igraph::E(g))]
+    # Look up edges that are in at least (k-2) triangles.
+    has_support <- (triangle_matrix >= (k-2))[igraph::get.edges(g, igraph::E(g))]
     # Trim to subgraph of supported edges.
     g <- igraph::subgraph.edges(g, which(has_support))
     # Re-compute number of edges in subgraph and see if it was trimmed.
@@ -61,18 +51,63 @@ truss <- function(g, k, color_graph = FALSE){
     if (edge_count == edge_count_new) {
       break
     }
-    # do only if ecount(g) is non-zero??
-    # color_matrix <- .color_graph(support_matrix)  # add edge colorings
     edge_count <- edge_count_new
   }
   if (color_graph){
-    print(system.time(g <- .color_graph(g)))  # experimental
+    g <- .color_graph(g)  # experimental
   }
   return(g)
 }
 
+#' Cluster by k-truss
+#'
+#' Compute maximal \code{k}-truss each edge belongs to.
+#'
+#' @param graph An undirected graph (must be igraph).
+#' @return Vector indicating the maximal \code{k}-truss that each edge belongs to (NA if none).
+#' @export
+#' @keywords graphs
+#' @examples
+#'
+#' require(igraph)
+#' set.seed(1)
+#' g <- sample_gnm(6, 9)
+#' E(g)$truss <- truss_edge(g)
+#'
+#' # Plot original graph.
+#' fixed_layout <- layout_with_lgl(g)
+#' plot(g, layout = fixed_layout)  # original
+#'
+#' # Plot graph with truss clustering.
+#' E(g)$weight <- 1
+#' E(g)$color <- "gray"
+#' E(g)[which(E(g)$truss <= 3)]$color <- "blue"
+#' E(g)[which(E(g)$truss <= 3)]$weight <- 3
+#' plot(g, layout = fixed_layout, edge.width = E(g)$weight)  # with truss
+truss_edge <- function(g){
+  g <- .validate_graph(g)
 
-# TODO: put in truss():
+  edge_count <- igraph::ecount(g)
+  if (edge_count == 0){
+    return(g)
+  }
+
+  # Initialize eid_, which is a temporary variable needed to identify edges.
+  igraph::E(g)$eid_ <- 1:igraph::ecount(g)
+
+  truss_result <- rep(NA_integer_, igraph::ecount(g))  # to hold the truss result (maximal k)
+
+  k <- 3  # initialize k, it will increment until the truss subgraph g is empty.
+  while (igraph::ecount(g) != 0){
+      g <- truss(g, k)
+      truss_result[igraph::E(g)$eid_] <- k  # store k-truss
+      k <- k + 1  # increment k
+  }
+  return(truss_result)
+}
+
+
+# Color the truss graph.
 .color_graph <- function(g){
   igraph::E(g)$color <- NA
   color <- 1

@@ -6,7 +6,6 @@
 #' @param k The level of support, requiring that every edge in subgraph is in
 #' at least (k-2) triangles (J. Cohen 2008). \code{k} must be at least 3.
 #' @return A subgraph containing all k-trusses in the graph for a given level of support \code{k}.
-#' @export
 #' @keywords graphs
 #' @examples
 #'

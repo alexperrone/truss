@@ -119,7 +119,7 @@ test_that("test truss equality for political books dataset", {
   igraph::E(g)$color <- "gray"
   # Truss.
   g_5_truss <- truss(g, k = 5, color_graph = TRUE)
-  plot_graph <- TRUE
+  plot_graph <- FALSE
   if (plot_graph == TRUE){
     # Plot original graph.
     fixed_layout <- igraph::layout_with_lgl(g)
