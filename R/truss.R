@@ -34,10 +34,12 @@ truss <- function(g, k, color_graph = FALSE){
   }
   g <- .validate_graph(g)
 
+  # Each k-truss is a subgraph of the (k–1)-core, so reduce the graph to (k-1)-core.
+  # This is quite a fast operation in igraph. It runs in O(m) time.
+  k_minus_1_core_vertices <- igraph::coreness(g) >= (k-1)  # needs to be stored separately for some reason
+  g <- igraph::induced_subgraph(g, vids = igraph::V(g)[k_minus_1_core_vertices])
+
   edge_count <- igraph::ecount(g)
-  if (edge_count == 0){
-    return(g)
-  }
 
   while (edge_count != 0){
     A <- igraph::get.adjacency(g)

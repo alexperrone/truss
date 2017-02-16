@@ -96,10 +96,10 @@ test_that("test truss equality for Truss2 dataset", {
                              class = "data.frame", row.names = c(NA, 16L)))
   g_5_truss <- truss(g, k = 5)
   expect_identical(igraph::as_data_frame(g_5_truss),
-                   structure(list(from = c("d", "b", "b", "b", "a", "a", "a",
-                                           "a", "c", "c"),
-                                  to = c("e", "c", "d", "e", "b", "c", "d",
-                                         "e", "d", "e"),
+                   structure(list(from = c("a", "a", "a", "a", "b", "b", "b",
+                                           "c", "c", "d"),
+                                  to = c("b", "c", "d", "e", "c", "d", "e",
+                                         "d", "e", "e"),
                                   Link.Value = c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1)),
                              .Names = c("from", "to", "Link.Value"),
                              class = "data.frame", row.names = c(NA, 10L)))
